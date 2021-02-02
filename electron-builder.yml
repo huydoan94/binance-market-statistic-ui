@@ -1,0 +1,12 @@
+appId: "com.electron.binance-market-statistics"
+productName: "Binance Market Statistics"
+copyright: "Copyright © 2021 ${author}"
+
+files: ["build/**/*", "node_modules/**/*"]
+directories:
+  buildResources: "assets"
+
+mac:
+  category: "public.app-category.utilities"
+
+npmRebuild: false

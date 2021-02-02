@@ -1,0 +1,36 @@
+.App {
+  background-color: #fafbfc;
+  height: 100vh;
+  display: flex;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.FullWidthTable {
+  height: 100%;
+  width: 100%;
+}
+
+.ResetCellStyle {
+  text-align: right;
+}
+
+.PositiveValue {
+  background-color: rgb(183, 225, 205) !important;
+
+  &[class~="ant-table-column-sort"] {
+    background-color: rgba(183, 225, 205, 0.8) !important;
+  }
+}
+
+.NegativeValue {
+  background-color: rgb(244, 199, 195) !important;
+
+  &[class~="ant-table-column-sort"] {
+    background-color: rgba(244, 199, 195, 0.8) !important;
+  }
+}
+
+.TradingViewModal {
+  width: auto !important;
+}
