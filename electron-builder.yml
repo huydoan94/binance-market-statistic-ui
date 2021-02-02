@@ -6,7 +6,17 @@ files: ["build/**/*", "node_modules/**/*"]
 directories:
   buildResources: "assets"
 
+win:
+  publish:
+    - github
+
 mac:
   category: "public.app-category.utilities"
+  publish:
+    - github
+
+linux:
+  publish:
+    - github
 
 npmRebuild: false
