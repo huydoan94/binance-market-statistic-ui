@@ -1,6 +1,8 @@
-import {
-  map, every, sortBy, isEmpty, isNil,
-} from 'lodash';
+import map from 'lodash/map';
+import every from 'lodash/every';
+import sortBy from 'lodash/sortBy';
+import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 
 const all = async (
   callers,

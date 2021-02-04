@@ -18,5 +18,3 @@ mac:
 linux:
   publish:
     - github
-
-npmRebuild: false

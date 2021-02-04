@@ -7,14 +7,16 @@ import isDev from 'electron-is-dev';
 import { autoUpdater } from "electron-updater";
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
-import ipcThread from './electronIpc';
+import { sendMarketAgg, setWindowWebContent } from './electronIpcs';
+import { init } from './utils/createBinanceBackgroundTask';
 
+let mainWindow = null;
 let updateTimeout = null;
-let mainWindow;
 
-const setUpdateTimeout = () => {
+const checkforUpdate = async () => {
+  clearTimeout(updateTimeout);
   autoUpdater.checkForUpdatesAndNotify();
-  updateTimeout = setTimeout(() => setUpdateTimeout(), 60000);
+  autoUpdater.on('update-not-available', () => { updateTimeout = setTimeout(checkforUpdate, 60 * 1000); });
 };
 
 const createWindow = () => {
@@ -47,15 +49,22 @@ const createWindow = () => {
   const loadUrl = isDev ? process.env.ELECTRON_START_URL : `file://${path.join(__dirname, 'index.html')}`;
   mainWindow.loadURL(loadUrl);
 
-  ipcThread();
-  setUpdateTimeout();
+  if (!isDev) checkforUpdate();
+
+  setWindowWebContent(mainWindow.webContents);
+  init(sendMarketAgg);
+};
+
+const destroyWindow = () => {
+  clearTimeout(updateTimeout);
+  mainWindow = null;
 };
 
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') return;
-  clearTimeout(updateTimeout);
+  destroyWindow();
   app.quit();
 });
 

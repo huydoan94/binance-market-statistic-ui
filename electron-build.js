@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const chalk = require('react-dev-utils/chalk');
 const { promisify } = require('util');
 const spawn = require('cross-spawn');
@@ -23,7 +22,17 @@ const electronWebpackConfig = {
       {
         test: /.*\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: "babel-loader"
+        use: [{
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env"
+            ],
+            plugins: [
+              "@babel/plugin-proposal-class-properties"
+            ]
+          }
+        }],
       }
     ]
   },
@@ -47,8 +56,7 @@ promisify(rimraf)(path.join(__dirname, 'build'))
   })
   .then(stats => {
     if (stats.hasErrors()) {
-      const msg = formatWebpackMessages(stats.toJson({ all: false, warnings: true, errors: true }));
-      throw new Error(msg.errors.join('\n\n'));
+      throw new Error(stats.toString({ all: false, warnings: true, errors: true }));
     }
     return;
   })

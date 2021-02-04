@@ -1,16 +1,12 @@
-import { noop } from 'lodash';
-import { electronImport } from './utils/electron';
-
-const WebSocket = electronImport('ws');
+import noop from 'lodash/noop';
+import WebSocket from 'ws';
 
 class BinanceWebSocket {
+  baseUrl = 'wss://stream.binance.com:9443/ws'
   url = null
   messageHandler = noop
-
   socketClient = null
-
   pingTimeout = null
-
   pingWaitTimeout = null
 
   constructor(url, messageHandler) {
@@ -20,7 +16,7 @@ class BinanceWebSocket {
   }
 
   createSocketClient = async () => {
-    this.socketClient = new WebSocket(this.url);
+    this.socketClient = new WebSocket(`${this.baseUrl}${this.url}`);
     this.socketClient.on('open', this.openHandler);
     this.socketClient.on('message', this.messageHandler);
     this.socketClient.on('error', this.errorHandler);
@@ -67,6 +63,10 @@ class BinanceWebSocket {
       () => this.ping(),
       20 * 60 * 1000,
     );
+  }
+
+  close = () => {
+    if (this.socketClient) this.socketClient.close();
   }
 }
 

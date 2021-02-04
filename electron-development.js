@@ -4,7 +4,6 @@ const spawn = require('cross-spawn');
 const kill = require('tree-kill');
 const rimraf = require('rimraf');
 const { promisify } = require('util');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 
 const port = process.env.PORT || 3000;
 const REACT_APP_STARTED_SIGNAL = 'Starting the development server...';
@@ -22,9 +21,19 @@ const electronWebpackConfig = {
   module: {
     rules: [
       {
-        test: /(.*)(js|mjs|jsx|ts|tsx)$/,
+        test: /.*\.(js|mjs|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: "babel-loader"
+        use: [{
+          loader: "babel-loader",
+          options: {
+            presets: [
+              "@babel/preset-env"
+            ],
+            plugins: [
+              "@babel/plugin-proposal-class-properties"
+            ]
+          }
+        }],
       }
     ]
   },
@@ -76,8 +85,7 @@ promisify(rimraf)(path.join(__dirname, 'build'))
           return;
         }
         if (stats.hasErrors()) {
-          const msg = formatWebpackMessages(stats.toJson({ all: false, warnings: true, errors: true }));
-          console.log(msg.errors.join('\n\n'));
+          console.log(stats.toString({ all: false, warnings: true, errors: true }));
           killAppProcess();
           killRendererProcess();
           return;
