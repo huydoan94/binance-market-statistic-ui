@@ -1,9 +1,10 @@
 import axios from 'axios';
+import keyBy from 'lodash/keyBy';
 
 import fetchWithRetry from './utils/fetchWithRetry';
 
 class BinanceCoinListTask {
-  coinList = [];
+  coinList = {};
   quoteAsset = 'USDT';
   fetchTimeout = null;
 
@@ -25,7 +26,7 @@ class BinanceCoinListTask {
 
     if (!symbols || symbols.length === 0) return;
 
-    this.coinList = symbols;
+    this.coinList = keyBy(symbols, 'symbol');
   }
 
   getCoinList = () => {

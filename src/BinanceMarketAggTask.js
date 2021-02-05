@@ -1,5 +1,8 @@
 import axios from 'axios';
 import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
+import forEach from 'lodash/forEach';
+import keyBy from 'lodash/keyBy';
 
 import fetchWithRetry from './utils/fetchWithRetry';
 import BinanceWebSocket from './BinanceWebsocket';
@@ -25,11 +28,13 @@ class BinanceMarketAggTask {
       volume: Number(p.volume),
       quoteVolume: Number(p.quoteVolume),
     })));
+
+    if (this.marketAggIpc) this.marketAggIpc(this.marketAgg);
   }
 
   onAggTradeStream = debounce((msg) => {
     const parsed = JSON.parse(msg);
-    const result = this.processMarketAgg(parsed.map(p => ({
+    this.marketAgg = this.processMarketAgg(parsed.map(p => ({
       symbol: p.s,
       lastPrice: Number(p.c),
       priceChange: Number(p.p),
@@ -37,55 +42,54 @@ class BinanceMarketAggTask {
       volume: Number(p.v),
       quoteVolume: Number(p.q),
     })));
-    this.marketAgg = result;
-    if (this.marketAggIpc) this.marketAggIpc(result);
+
+    if (this.marketAggIpc) this.marketAggIpc(this.marketAgg);
   }, 500, { maxWait: 2000 })
 
   processMarketAgg = (coinTicker) => {
-    if (!globalThis.binanceCoinListTask || !globalThis.binanceCoinListTask.getCoinList().length === 0) return [];
-    if (!coinTicker) return [];
+    if (!globalThis.binanceCoinListTask || isEmpty(globalThis.binanceCoinListTask.getCoinList())) return [];
 
+    const coinTickerMap = keyBy(coinTicker, 'symbol');
     const coinList = globalThis.binanceCoinListTask.getCoinList();
     const result = [];
-    for (let i = 0; i < coinList.length; i += 1) {
-      const coin = coinList[i];
-      const info = coinTicker.find(d => d.symbol === coin.symbol);
+    forEach(coinList, (coinData, symbol) => {
+      const info = coinTickerMap[symbol];
       if (!info) {
-        const oldInfo = this.marketAgg.find(d => d.ticker === coin.baseAsset);
+        const oldInfo = this.marketAgg.find(d => d.ticker === coinData.baseAsset);
         result.push(oldInfo || {
-          ticker: coin.baseAsset,
+          ticker: coinData.baseAsset,
           price: 0,
           percentage2hrChange: 0,
           price24hrChange: 0,
           percentage24hrChange: 0,
           volume24hr: 0,
           quoteVolume24hr: 0,
-          tradeLink: `https://www.binance.com/en/trade/${coin.symbol}`,
+          tradeLink: `https://www.binance.com/en/trade/${symbol}`,
         });
-        continue;
+        return;
       }
 
       let change2h;
-      if (globalThis.binanceKlines2hrTask) {
+      if (globalThis.binanceKlines2hrTask && !isEmpty(globalThis.binanceKlines2hrTask.getKlines2hr())) {
         const coin2hrKlines = globalThis.binanceKlines2hrTask.getKlines2hr();
-        const klineData2h = coin2hrKlines.find(kld => kld.symbol === coin.symbol);
+        const klineData2h = coin2hrKlines[symbol];
         if (klineData2h) {
-          const { data: [, , , , last2hPrice] } = klineData2h;
+          const [, , , , last2hPrice] = klineData2h;
           change2h = (info.lastPrice - Number(last2hPrice)) / Number(last2hPrice);
         }
       }
 
       result.push({
-        ticker: coin.baseAsset,
+        ticker: coinData.baseAsset,
         price: info.lastPrice,
         percentage2hrChange: !change2h ? 0 : change2h,
         price24hrChange: info.priceChange,
         percentage24hrChange: info.priceChangePercent / 100,
         volume24hr: info.volume,
         quoteVolume24hr: info.quoteVolume,
-        tradeLink: `https://www.binance.com/en/trade/${coin.symbol}`,
+        tradeLink: `https://www.binance.com/en/trade/${symbol}`,
       });
-    }
+    });
 
     return result;
   }
