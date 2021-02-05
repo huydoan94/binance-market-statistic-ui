@@ -12,12 +12,12 @@ import { sendMarketAgg, setWindowWebContent } from './electronIpcs';
 import { init } from './utils/createBinanceBackgroundTask';
 
 let mainWindow = null;
-let updateTimeout = null;
 
 const checkforUpdate = async () => {
-  clearTimeout(updateTimeout);
-  autoUpdater.checkForUpdatesAndNotify();
-  autoUpdater.on('update-not-available', () => { updateTimeout = setTimeout(checkforUpdate, 60 * 1000); });
+  autoUpdater.on('update-not-available', () => setTimeout(autoUpdater.checkForUpdates, 60 * 1000));
+  autoUpdater.on('update-available', () => autoUpdater.downloadUpdate());
+  autoUpdater.on('update-downloaded', () => autoUpdater.quitAndInstall());
+  autoUpdater.checkForUpdates();
 };
 
 const createWindow = () => {
@@ -57,7 +57,6 @@ const createWindow = () => {
 };
 
 const destroyWindow = () => {
-  clearTimeout(updateTimeout);
   setWindowWebContent({ send: noop });
   mainWindow = null;
 };

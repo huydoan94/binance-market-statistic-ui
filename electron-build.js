@@ -8,7 +8,6 @@ const rimraf = require('rimraf');
 const releaseParam = process.argv[2] === '--release';
 
 process.env.NODE_ENV = 'production';
-if (releaseParam) process.env.GH_TOKEN = 'ab5e475c3400f1cd8076f7be6689931b891d68bc';
 
 const electronWebpackConfig = {
   mode: process.env.NODE_ENV,

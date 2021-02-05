@@ -2,19 +2,17 @@ appId: "com.electron.binance-market-statistics"
 productName: "Binance Market Statistics"
 copyright: "Copyright © 2021 ${author}"
 
-files: ["build/**/*", "node_modules/**/*"]
+files:
+  - "build/**/*"
+  - "node_modules/**/*"
+
 directories:
   buildResources: "assets"
 
-win:
-  publish:
-    - github
+publish:
+  - provider: github
+    owner: huydoan94
+    repo: binance-market-statistic-ui
 
 mac:
   category: "public.app-category.utilities"
-  publish:
-    - github
-
-linux:
-  publish:
-    - github
