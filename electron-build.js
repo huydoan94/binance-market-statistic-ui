@@ -46,7 +46,7 @@ const electronWebpackConfig = {
 console.log(chalk.cyan('Building Renderer...'));
 promisify(rimraf)(path.join(__dirname, 'build'))
   .then(() => new Promise((res, rej) => {
-    const instance = spawn('react-scripts build', { stdio: 'inherit' });
+    const instance = spawn('craco', ['build'], { stdio: 'inherit' });
     instance.on('error', (err) => rej(err));
     instance.on('exit', (code) => { if (!code) res(); });
   }))
@@ -66,7 +66,7 @@ promisify(rimraf)(path.join(__dirname, 'build'))
       console.log(chalk.cyan('Start releasing app...'));
       const howIndex = process.argv.indexOf('--how');
       const how = process.argv[howIndex + 1];
-      const instance = spawn('electron-builder --publish ' + how, { stdio: 'inherit' });
+      const instance = spawn('electron-builder', ['--publish', how], { stdio: 'inherit' });
       instance.on('error', () => console.error(chalk.red('Release app failed')));
       instance.on('exit', (code) => {
         if (!code) console.log(chalk.green('Released app successfully'));

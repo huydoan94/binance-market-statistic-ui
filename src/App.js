@@ -1,5 +1,3 @@
-import 'antd/dist/antd.css';
-
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal } from 'antd';
 import { compare } from 'array-sort-compare';
@@ -26,6 +24,7 @@ const columns = [
     onFilter: (value, record) => record.ticker.includes(value),
     sorter: (a, b) => comparer(a.ticker, b.ticker),
     sortDirections: ['descend'],
+    fixed: 'left',
   },
   {
     title: 'Current Price',
@@ -132,16 +131,16 @@ function BinanceMarketTable() {
   }, []);
 
   return (
-    <div className={styles.App}>
-      <Table
-        columns={columns}
-        rowKey={({ ticker }) => ticker}
-        pagination={false}
-        dataSource={data}
-        className={styles.FullWidthTable}
-        bordered
-      />
-    </div>
+    <Table
+      columns={columns}
+      rowKey="ticker"
+      pagination={false}
+      dataSource={data}
+      className={styles.FullWidthTable}
+      loading={data.length === 0}
+      bordered
+      sticky
+    />
   );
 }
 

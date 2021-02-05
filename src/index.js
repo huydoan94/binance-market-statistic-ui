@@ -1,3 +1,4 @@
+import 'antd/dist/antd.dark.less';
 import './index.scss';
 
 import React from 'react';

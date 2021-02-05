@@ -6,6 +6,7 @@ import path from 'path';
 import isDev from 'electron-is-dev';
 import { autoUpdater } from "electron-updater";
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import noop from 'lodash/noop';
 
 import { sendMarketAgg, setWindowWebContent } from './electronIpcs';
 import { init } from './utils/createBinanceBackgroundTask';
@@ -57,6 +58,7 @@ const createWindow = () => {
 
 const destroyWindow = () => {
   clearTimeout(updateTimeout);
+  setWindowWebContent({ send: noop });
   mainWindow = null;
 };
 

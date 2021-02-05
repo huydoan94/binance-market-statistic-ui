@@ -55,7 +55,7 @@ let isAppProcessReload = false;
 let isElectronAppStarted = false;
 promisify(rimraf)(path.join(__dirname, 'build'))
   .then(() => {
-    rendererProcess = spawn('react-scripts', ['start']);
+    rendererProcess = spawn('craco', ['start']);
     rendererProcess.stdout.pipe(process.stdout);
     rendererProcess.stderr.pipe(process.stderr);
     rendererProcess.on('exit', () => {

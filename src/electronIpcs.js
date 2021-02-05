@@ -1,6 +1,6 @@
 import { noop } from 'lodash/noop';
 
-let windowWebContent = noop;
+let windowWebContent = { send: noop };
 
 export const setWindowWebContent = (wwc) => {
   windowWebContent = wwc;

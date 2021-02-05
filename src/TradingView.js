@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import styles from './TradingView.module.scss';
+
 function TradingView({ ticker }) {
   useEffect(() => {
     new window.TradingView.widget(
@@ -8,7 +10,7 @@ function TradingView({ ticker }) {
         symbol: `BINANCE:${ticker}USDT`,
         interval: 'D',
         timezone: 'Asia/Ho_Chi_Minh',
-        theme: 'light',
+        theme: 'dark',
         style: '1',
         locale: 'en',
         toolbar_bg: '#f1f3f6',
@@ -20,7 +22,7 @@ function TradingView({ ticker }) {
     );
   }, [ticker]);
 
-  return <div id={`tradingViewChart-${ticker}`} style={{ width: '100%', height: 'calc(100vh - 300px)' }} />;
+  return <div id={`tradingViewChart-${ticker}`} className={styles.container} />;
 }
 
 export default TradingView;
