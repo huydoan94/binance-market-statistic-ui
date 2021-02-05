@@ -5,10 +5,12 @@ const { promisify } = require('util');
 const spawn = require('cross-spawn');
 const rimraf = require('rimraf');
 
+const githubToken = require('./github-token');
+
 const releaseParam = process.argv[2] === '--release';
 
 process.env.NODE_ENV = 'production';
-if (releaseParam) process.env.GH_TOKEN = '4ca2563076bb2d1261fe46712a9ba45603b9f7ef';
+if (releaseParam) process.env.GH_TOKEN = githubToken;
 
 const electronWebpackConfig = {
   mode: process.env.NODE_ENV,

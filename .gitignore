@@ -25,3 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 *.mp4
 *log*
+
+github-token.js
