@@ -13,11 +13,10 @@ import { init } from './utils/createBinanceBackgroundTask';
 
 let mainWindow = null;
 
-const checkforUpdate = async () => {
-  autoUpdater.on('update-not-available', () => setTimeout(autoUpdater.checkForUpdates, 60 * 1000));
+const checkforUpdate = () => {
+  autoUpdater.checkForUpdates().catch(() => null);
   autoUpdater.on('update-available', () => autoUpdater.downloadUpdate());
   autoUpdater.on('update-downloaded', () => autoUpdater.quitAndInstall());
-  autoUpdater.checkForUpdates().catch(() => null);
 };
 
 const createWindow = () => {
