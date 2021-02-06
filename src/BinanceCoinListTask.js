@@ -20,7 +20,7 @@ class BinanceCoinListTask {
     if (!data) return;
 
     const symbols = data.symbols
-      .filter(s => s.quoteAsset === this.quoteAsset && !/.*(UP|DOWN)$/.test(s.baseAsset))
+      .filter(s => s.status === 'TRADING' && s.quoteAsset === this.quoteAsset && !/.*(UP|DOWN)$/.test(s.baseAsset))
       .map(s => ({ symbol: s.symbol, baseAsset: s.baseAsset }))
       .sort((a, b) => (a.baseAsset < b.baseAsset ? -1 : 0));
 
