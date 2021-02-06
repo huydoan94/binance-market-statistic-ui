@@ -1,3 +1,8 @@
+.TableContainer {
+  height: calc(100% - 4.5rem);
+  overflow-y: auto;
+}
+
 .FullWidthTable {
   height: 100%;
   width: 100%;
@@ -25,4 +30,9 @@
 
 .TradingViewModal {
   width: auto !important;
+}
+
+.IntervalSelect {
+  padding-left: 8px;
+  width: 150px;
 }

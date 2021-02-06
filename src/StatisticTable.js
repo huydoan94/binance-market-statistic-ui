@@ -1,13 +1,13 @@
 import React from 'react';
-import { Table, Button, Modal, Input, Space } from 'antd';
+import { Table, Button, Modal, Input, Space, PageHeader, Row, Select } from 'antd';
 import { compare } from 'array-sort-compare';
 import { SearchOutlined } from '@ant-design/icons';
 import cx from 'classnames';
+import { debounce, noop } from 'lodash';
 
 import TradingView from './TradingView';
 
 import styles from './StatisticTable.module.scss';
-import { noop } from 'lodash';
 
 const { shell, ipcRenderer } = window.require('electron');
 
@@ -24,8 +24,33 @@ class StatisticTable extends React.PureComponent {
     marketAgg: [],
     searchText: '',
     searchedColumn: '',
+    isUpdate: true,
+    selectedInterval: 'immediately'
   }
+
   marketAggIpc = noop
+
+  updateInterval = [
+    {
+      key: 'immediately',
+      value: 'Immediately'
+    },
+    {
+      key: '1m',
+      value: '1 minute',
+      ms: 60000
+    },
+    {
+      key: '5m',
+      value: '5 minutes',
+      ms: 300000
+    },
+    {
+      key: '15m',
+      value: '15 minutes',
+      ms: 900000
+    }
+  ]
 
   columns = [
     {
@@ -151,6 +176,7 @@ class StatisticTable extends React.PureComponent {
       title: '',
       dataIndex: '',
       key: 'tradeButton',
+      width: 100,
       render: (_, { tradeLink, ticker }) => (
         <>
           <Button
@@ -170,13 +196,21 @@ class StatisticTable extends React.PureComponent {
   ];
 
   componentDidMount() {
-    this.marketAggIpc = (_, marketAgg) => this.setState({ marketAgg });
     ipcRenderer.on('marketAggData', this.marketAggIpc);
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener(this.marketAggIpc);
+    ipcRenderer.removeListener('marketAggData', this.marketAggIpc);
   }
+
+  baseMarketAggIpc = (_, marketAgg) => {
+    const { isUpdate } = this.state;
+    if (!isUpdate) return;
+
+    this.setState({ marketAgg });
+  }
+
+  marketAggIpc = this.baseMarketAggIpc
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -191,19 +225,74 @@ class StatisticTable extends React.PureComponent {
     this.setState({ searchText: '' });
   };
 
-  render() {
-    const { marketAgg } = this.state;
+  handleStartStopUpdate = () => this.setState(({ isUpdate }) => ({ isUpdate: !isUpdate }));
 
-    return <Table
-      columns={this.columns}
-      rowKey="ticker"
-      pagination={false}
-      dataSource={marketAgg}
-      className={styles.FullWidthTable}
-      loading={marketAgg.length === 0}
-      bordered
-      sticky
-    />;
+  handleIntervalChange = (value) => {
+    ipcRenderer.removeListener('marketAggData', this.marketAggIpc);
+
+    if (value === this.updateInterval[0].key) {
+      this.marketAggIpc = this.baseMarketAggIpc;
+    } else {
+      const select = this.updateInterval.find(u => u.key === value);
+      this.marketAggIpc = debounce(this.baseMarketAggIpc, select.ms, { maxWait: select.ms });
+    }
+
+    ipcRenderer.on('marketAggData', this.marketAggIpc);
+    this.setState({ selectedInterval: value });
+  }
+
+  renderUpdateInterval = () => {
+    const { selectedInterval, isUpdate } = this.state;
+    const { Option } = Select;
+    return (
+      <Select
+        value={selectedInterval}
+        onChange={this.handleIntervalChange}
+        disabled={!isUpdate}
+        className={styles.IntervalSelect}
+      >
+        {this.updateInterval.map(u => (
+          <Option key={u.key} value={u.key}>{u.value}</Option>
+        ))}
+      </Select>
+    );
+  }
+
+  render() {
+    const { marketAgg, isUpdate } = this.state;
+
+    return (
+      <>
+        <PageHeader
+          onBack={() => window.history.back()}
+          title="Market Statistic Table"
+          backIcon={false}
+          extra={[
+            <Button
+              key="1"
+              onClick={this.handleStartStopUpdate}
+              type="primary"
+              danger={isUpdate}
+            >
+              {isUpdate ? 'Stop' : 'Start'} Update
+            </Button>,
+            this.renderUpdateInterval(),
+          ]}
+        />
+        <Row className={styles.TableContainer}>
+          <Table
+            columns={this.columns}
+            rowKey="ticker"
+            pagination={false}
+            dataSource={marketAgg}
+            className={styles.FullWidthTable}
+            loading={marketAgg.length === 0}
+            bordered
+            sticky
+          />
+        </Row>
+      </>
+    );
   }
 }
 
