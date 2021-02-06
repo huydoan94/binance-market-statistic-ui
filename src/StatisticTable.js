@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Modal, Input, Space, PageHeader, Row, Select } from 'antd';
+import { Table, Button, Modal, Input, Space, PageHeader, Row, Select, Tag } from 'antd';
 import { compare } from 'array-sort-compare';
 import { SearchOutlined } from '@ant-design/icons';
 import cx from 'classnames';
@@ -176,7 +176,6 @@ class StatisticTable extends React.PureComponent {
       title: '',
       dataIndex: '',
       key: 'tradeButton',
-      width: 100,
       render: (_, { tradeLink, ticker }) => (
         <>
           <Button
@@ -246,16 +245,20 @@ class StatisticTable extends React.PureComponent {
     const { selectedInterval, isUpdate } = this.state;
     const { Option } = Select;
     return (
-      <Select
-        value={selectedInterval}
-        onChange={this.handleIntervalChange}
-        disabled={!isUpdate}
-        className={styles.IntervalSelect}
-      >
-        {this.updateInterval.map(u => (
-          <Option key={u.key} value={u.key}>{u.value}</Option>
-        ))}
-      </Select>
+      <>
+        Update interval:
+        <Select
+          key="2"
+          value={selectedInterval}
+          onChange={this.handleIntervalChange}
+          disabled={!isUpdate}
+          className={styles.IntervalSelect}
+        >
+          {this.updateInterval.map(u => (
+            <Option key={u.key} value={u.key}>{u.value}</Option>
+          ))}
+        </Select>
+      </>
     );
   }
 
@@ -268,7 +271,9 @@ class StatisticTable extends React.PureComponent {
           onBack={() => window.history.back()}
           title="Market Statistic Table"
           backIcon={false}
+          tags={<Tag color={isUpdate ? 'blue' : 'red'}>{isUpdate ? 'Running' : 'Not Running'}</Tag>}
           extra={[
+            this.renderUpdateInterval(),
             <Button
               key="1"
               onClick={this.handleStartStopUpdate}
@@ -276,8 +281,7 @@ class StatisticTable extends React.PureComponent {
               danger={isUpdate}
             >
               {isUpdate ? 'Stop' : 'Start'} Update
-            </Button>,
-            this.renderUpdateInterval()
+            </Button>
           ]}
         />
         <Row className={styles.TableContainer}>
@@ -286,8 +290,8 @@ class StatisticTable extends React.PureComponent {
             rowKey="ticker"
             pagination={false}
             dataSource={marketAgg}
-            className={styles.FullWidthTable}
             loading={marketAgg.length === 0}
+            className={styles.Table}
             bordered
             sticky
           />

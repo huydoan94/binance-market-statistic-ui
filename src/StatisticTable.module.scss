@@ -3,9 +3,11 @@
   overflow-y: auto;
 }
 
-.FullWidthTable {
-  height: 100%;
-  width: 100%;
+.Table {
+  div[class="ant-table-body"] {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
 }
 
 .ResetCellStyle {
@@ -33,6 +35,6 @@
 }
 
 .IntervalSelect {
-  padding-left: 8px;
+  padding-left: 4px;
   width: 150px;
 }
