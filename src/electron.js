@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import { app, BrowserWindow, Menu } from 'electron';
 import path from 'path';
 import isDev from 'electron-is-dev';
-import { autoUpdater } from "electron-updater";
+import { autoUpdater } from 'electron-updater';
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import noop from 'lodash/noop';
 
@@ -33,8 +33,8 @@ const createWindow = () => {
     const template = [
       {
         label: app.getName(),
-        submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'hide' }, { role: 'quit' }],
-      },
+        submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'hide' }, { role: 'quit' }]
+      }
     ];
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));

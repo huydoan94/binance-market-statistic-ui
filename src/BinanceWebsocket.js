@@ -54,14 +54,14 @@ class BinanceWebSocket {
     this.socketClient.ping();
     this.pingWaitTimeout = setTimeout(
       () => this.socketClient.close(),
-      60 * 1000,
+      60 * 1000
     );
   }
 
   setPingTimeout = () => {
     this.pingTimeout = setTimeout(
       () => this.ping(),
-      20 * 60 * 1000,
+      20 * 60 * 1000
     );
   }
 

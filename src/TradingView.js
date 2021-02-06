@@ -4,6 +4,7 @@ import styles from './TradingView.module.scss';
 
 function TradingView({ ticker }) {
   useEffect(() => {
+    // eslint-disable-next-line no-new, new-cap
     new window.TradingView.widget(
       {
         autosize: true,
@@ -17,8 +18,8 @@ function TradingView({ ticker }) {
         enable_publishing: false,
         save_image: false,
         hidevolume: true,
-        container_id: `tradingViewChart-${ticker}`,
-      },
+        container_id: `tradingViewChart-${ticker}`
+      }
     );
   }, [ticker]);
 

@@ -26,7 +26,7 @@ class BinanceMarketAggTask {
       priceChange: Number(p.priceChange),
       priceChangePercent: Number(p.priceChangePercent),
       volume: Number(p.volume),
-      quoteVolume: Number(p.quoteVolume),
+      quoteVolume: Number(p.quoteVolume)
     })));
 
     if (this.marketAggIpc) this.marketAggIpc(this.marketAgg);
@@ -40,7 +40,7 @@ class BinanceMarketAggTask {
       priceChange: Number(p.p),
       priceChangePercent: Number(p.P),
       volume: Number(p.v),
-      quoteVolume: Number(p.q),
+      quoteVolume: Number(p.q)
     })));
 
     if (this.marketAggIpc) this.marketAggIpc(this.marketAgg);
@@ -64,7 +64,7 @@ class BinanceMarketAggTask {
           percentage24hrChange: 0,
           volume24hr: 0,
           quoteVolume24hr: 0,
-          tradeLink: `https://www.binance.com/en/trade/${symbol}`,
+          tradeLink: `https://www.binance.com/en/trade/${symbol}`
         });
         return;
       }
@@ -87,7 +87,7 @@ class BinanceMarketAggTask {
         percentage24hrChange: info.priceChangePercent / 100,
         volume24hr: info.volume,
         quoteVolume24hr: info.quoteVolume,
-        tradeLink: `https://www.binance.com/en/trade/${symbol}`,
+        tradeLink: `https://www.binance.com/en/trade/${symbol}`
       });
     });
 

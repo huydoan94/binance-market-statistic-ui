@@ -97,8 +97,8 @@ class StatisticTable extends React.PureComponent {
             : '',
         onFilterDropdownVisibleChange: visible => {
           if (visible) setTimeout(() => this.searchInput.select(), 100);
-        },
-      }))('ticker'),
+        }
+      }))('ticker')
     },
     {
       title: 'Current Price',
@@ -106,7 +106,7 @@ class StatisticTable extends React.PureComponent {
       key: 'price',
       sorter: (a, b) => comparer(a.price, b.price),
       render: (_, { price }) => format(price),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '% 2hr Price Change',
@@ -117,12 +117,12 @@ class StatisticTable extends React.PureComponent {
         props: {
           className: cx({
             [styles.PositiveValue]: percentage2hrChange > 0,
-            [styles.NegativeValue]: percentage2hrChange < 0,
-          }),
+            [styles.NegativeValue]: percentage2hrChange < 0
+          })
         },
-        children: percentFormat(percentage2hrChange),
+        children: percentFormat(percentage2hrChange)
       }),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '24hr Price Change',
@@ -133,12 +133,12 @@ class StatisticTable extends React.PureComponent {
         props: {
           className: cx({
             [styles.PositiveValue]: price24hrChange > 0,
-            [styles.NegativeValue]: price24hrChange < 0,
-          }),
+            [styles.NegativeValue]: price24hrChange < 0
+          })
         },
-        children: format(price24hrChange),
+        children: format(price24hrChange)
       }),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '% 24hr Price Change',
@@ -149,12 +149,12 @@ class StatisticTable extends React.PureComponent {
         props: {
           className: cx({
             [styles.PositiveValue]: percentage24hrChange > 0,
-            [styles.NegativeValue]: percentage24hrChange < 0,
-          }),
+            [styles.NegativeValue]: percentage24hrChange < 0
+          })
         },
-        children: percentFormat(percentage24hrChange),
+        children: percentFormat(percentage24hrChange)
       }),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '24hr Volume',
@@ -162,7 +162,7 @@ class StatisticTable extends React.PureComponent {
       key: 'volume24hr',
       sorter: (a, b) => comparer(a.volume24hr, b.volume24hr),
       render: (_, { volume24hr }) => integerFormat(volume24hr),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '24hr USDT Volume',
@@ -170,7 +170,7 @@ class StatisticTable extends React.PureComponent {
       key: 'quoteVolume24hr',
       sorter: (a, b) => comparer(a.quoteVolume24hr, b.quoteVolume24hr),
       render: (_, { quoteVolume24hr }) => integerFormat(quoteVolume24hr),
-      className: styles.ResetCellStyle,
+      className: styles.ResetCellStyle
     },
     {
       title: '',
@@ -184,15 +184,15 @@ class StatisticTable extends React.PureComponent {
             onClick={() => Modal.info({
               title: `${ticker} / USDT`,
               content: <TradingView ticker={ticker} />,
-              className: styles.TradingViewModal,
+              className: styles.TradingViewModal
             })}
           >
             View
           </Button>
           <Button type="link" onClick={() => shell.openExternal(tradeLink)}>Trade</Button>
         </>
-      ),
-    },
+      )
+    }
   ];
 
   componentDidMount() {
@@ -216,7 +216,7 @@ class StatisticTable extends React.PureComponent {
     confirm();
     this.setState({
       searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
+      searchedColumn: dataIndex
     });
   };
 
@@ -228,6 +228,7 @@ class StatisticTable extends React.PureComponent {
   handleStartStopUpdate = () => this.setState(({ isUpdate }) => ({ isUpdate: !isUpdate }));
 
   handleIntervalChange = (value) => {
+    if (this.marketAggIpc.cancel) this.marketAggIpc.cancel();
     ipcRenderer.removeListener('marketAggData', this.marketAggIpc);
 
     if (value === this.updateInterval[0].key) {
@@ -276,7 +277,7 @@ class StatisticTable extends React.PureComponent {
             >
               {isUpdate ? 'Stop' : 'Start'} Update
             </Button>,
-            this.renderUpdateInterval(),
+            this.renderUpdateInterval()
           ]}
         />
         <Row className={styles.TableContainer}>

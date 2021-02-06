@@ -7,7 +7,7 @@ import isNil from 'lodash/isNil';
 const all = async (
   callers,
   maxPromise = 5,
-  stopOnError = true,
+  stopOnError = true
 ) => {
   if (isEmpty(callers)) return [];
   return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ const promiseMap = async (
   collection,
   iteratee,
   maxPromise = 20,
-  stopOnError = true,
+  stopOnError = true
 ) => {
   if (isNil(collection)) return [];
   const iteratees = map(
@@ -71,7 +71,7 @@ const promiseMap = async (
     (value, index, ...others) => async () => {
       const result = await iteratee(value, index, ...others);
       return { index, result };
-    },
+    }
   );
   const results = await all(iteratees, maxPromise, stopOnError);
   const sorted = sortBy(results, (r) => r.index);
@@ -80,5 +80,5 @@ const promiseMap = async (
 
 export {
   all,
-  promiseMap as map,
+  promiseMap as map
 };
