@@ -13042,11 +13042,6 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-virtualizedtableforantd4@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/virtualizedtableforantd4/-/virtualizedtableforantd4-1.1.2.tgz#399a897ca41ba5f5e44c42e8e794cc0072b6acf7"
-  integrity sha512-kXXoELGoEwQj+Vc48PM+lLOIekyXeCpe1PCK5rknOTkIIj+UwLbzdzLXBl4/hFMlA1LXCKfoP4IPkzx/mpKa/Q==
-
 vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
