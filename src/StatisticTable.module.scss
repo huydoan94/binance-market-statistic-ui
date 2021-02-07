@@ -1,5 +1,12 @@
+.Page {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
 .TableContainer {
-  height: calc(100% - 4.5rem);
+  flex: 1 1 auto;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -7,6 +14,10 @@
   div[class="ant-table-body"] {
     overflow-x: auto !important;
     overflow-y: hidden !important;
+  }
+
+  div[class~="ant-table-sticky-header"] {
+    top: -1px !important;
   }
 }
 

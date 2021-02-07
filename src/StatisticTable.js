@@ -59,6 +59,7 @@ class StatisticTable extends React.PureComponent {
       key: 'ticker',
       onFilter: (value, record) => record.ticker.includes(value),
       sorter: (a, b) => comparer(a.ticker, b.ticker),
+      width: 300,
       sortDirections: ['descend'],
       fixed: 'left',
       ...((dataIndex) => ({
@@ -105,6 +106,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'price',
       key: 'price',
       sorter: (a, b) => comparer(a.price, b.price),
+      width: 200,
       render: (_, { price }) => format(price),
       className: styles.ResetCellStyle
     },
@@ -113,6 +115,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'percentage2hrChange',
       key: 'percentage2hrChange',
       sorter: (a, b) => comparer(a.percentage2hrChange, b.percentage2hrChange),
+      width: 200,
       render: (_, { percentage2hrChange }) => ({
         props: {
           className: cx({
@@ -129,6 +132,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'price24hrChange',
       key: 'price24hrChange',
       sorter: (a, b) => comparer(a.price24hrChange, b.price24hrChange),
+      width: 200,
       render: (_, { price24hrChange }) => ({
         props: {
           className: cx({
@@ -145,6 +149,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'percentage24hrChange',
       key: 'percentage24hrChange',
       sorter: (a, b) => comparer(a.percentage24hrChange, b.percentage24hrChange),
+      width: 200,
       render: (_, { percentage24hrChange }) => ({
         props: {
           className: cx({
@@ -161,6 +166,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'volume24hr',
       key: 'volume24hr',
       sorter: (a, b) => comparer(a.volume24hr, b.volume24hr),
+      width: 200,
       render: (_, { volume24hr }) => integerFormat(volume24hr),
       className: styles.ResetCellStyle
     },
@@ -169,6 +175,7 @@ class StatisticTable extends React.PureComponent {
       dataIndex: 'quoteVolume24hr',
       key: 'quoteVolume24hr',
       sorter: (a, b) => comparer(a.quoteVolume24hr, b.quoteVolume24hr),
+      width: 200,
       render: (_, { quoteVolume24hr }) => integerFormat(quoteVolume24hr),
       className: styles.ResetCellStyle
     },
@@ -176,6 +183,7 @@ class StatisticTable extends React.PureComponent {
       title: '',
       dataIndex: '',
       key: 'tradeButton',
+      width: 180,
       render: (_, { tradeLink, ticker }) => (
         <>
           <Button
@@ -266,7 +274,7 @@ class StatisticTable extends React.PureComponent {
     const { marketAgg, isUpdate } = this.state;
 
     return (
-      <>
+      <div className={styles.Page}>
         <PageHeader
           onBack={() => window.history.back()}
           title="Market Statistic Table"
@@ -292,11 +300,12 @@ class StatisticTable extends React.PureComponent {
             dataSource={marketAgg}
             loading={marketAgg.length === 0}
             className={styles.Table}
+            scroll={{ x: true, y: '100%' }}
             bordered
             sticky
           />
         </Row>
-      </>
+      </div>
     );
   }
 }
