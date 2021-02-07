@@ -1,7 +1,8 @@
 import React from 'react';
 import { Table, Button, Modal, Input, Space, PageHeader, Row, Select, Tag } from 'antd';
+import { UpOutlined, SearchOutlined } from '@ant-design/icons';
 import { compare } from 'array-sort-compare';
-import { SearchOutlined } from '@ant-design/icons';
+
 import cx from 'classnames';
 import { debounce, noop } from 'lodash';
 
@@ -25,8 +26,11 @@ class StatisticTable extends React.PureComponent {
     searchText: '',
     searchedColumn: '',
     isUpdate: true,
-    selectedInterval: 'immediately'
+    selectedInterval: 'immediately',
+    showScrollToTop: false
   }
+
+  tableContainerRef = null
 
   marketAggIpc = noop
 
@@ -204,10 +208,12 @@ class StatisticTable extends React.PureComponent {
 
   componentDidMount() {
     ipcRenderer.on('marketAggData', this.marketAggIpc);
+    this.tableContainerRef.addEventListener('scroll', this.handleTableScroll);
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('marketAggData', this.marketAggIpc);
+    this.tableContainerRef.removeEventListener('scroll', this.handleTableScroll);
   }
 
   baseMarketAggIpc = (_, marketAgg) => {
@@ -247,6 +253,36 @@ class StatisticTable extends React.PureComponent {
 
     ipcRenderer.on('marketAggData', this.marketAggIpc);
     this.setState({ selectedInterval: value });
+  }
+
+  saveTableContainerRef = tableContainerRef => {
+    this.tableContainerRef = tableContainerRef;
+  }
+
+  handleTableScroll = debounce(() => {
+    this.setState({ showScrollToTop: this.tableContainerRef.scrollTop > 0 });
+  }, 150)
+
+  handleClickScrollToTop = () => {
+    this.setState({ showScrollToTop: false });
+    this.tableContainerRef.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  renderScrollToTop = () => {
+    const { showScrollToTop } = this.state;
+    return showScrollToTop && (
+      <Button
+        type="primary"
+        shape="circle"
+        icon={<UpOutlined />}
+        size="large"
+        className={styles.ScrollToTop}
+        onClick={this.handleClickScrollToTop}
+      />
+    );
   }
 
   renderUpdateInterval = () => {
@@ -292,7 +328,7 @@ class StatisticTable extends React.PureComponent {
             </Button>
           ]}
         />
-        <Row className={styles.TableContainer}>
+        <Row className={styles.TableContainer} ref={this.saveTableContainerRef}>
           <Table
             columns={this.columns}
             rowKey="ticker"
@@ -304,6 +340,7 @@ class StatisticTable extends React.PureComponent {
             bordered
             sticky
           />
+          {this.renderScrollToTop()}
         </Row>
       </div>
     );

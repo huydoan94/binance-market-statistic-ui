@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "ant-design": "^1.0.0",
+    "@ant-design/icons": "^4.4.0",
     "antd": "^4.11.2",
     "array-sort-compare": "^1.0.1",
     "axios": "^0.21.1",

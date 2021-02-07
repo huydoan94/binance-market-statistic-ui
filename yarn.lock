@@ -2459,11 +2459,6 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-ant-design@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ant-design/-/ant-design-1.0.0.tgz#53ea0a397da976358e88bf06224fb3de756b87b4"
-  integrity sha1-U+oKOX2pdjWOiL8GIk+z3nVrh7Q=
-
 antd@^4.11.2:
   version "4.12.2"
   resolved "https://registry.yarnpkg.com/antd/-/antd-4.12.2.tgz#3e00b21de418c94a358bf1fc064de15654a30161"
@@ -13046,6 +13041,11 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+virtualizedtableforantd4@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/virtualizedtableforantd4/-/virtualizedtableforantd4-1.1.2.tgz#399a897ca41ba5f5e44c42e8e794cc0072b6acf7"
+  integrity sha512-kXXoELGoEwQj+Vc48PM+lLOIekyXeCpe1PCK5rknOTkIIj+UwLbzdzLXBl4/hFMlA1LXCKfoP4IPkzx/mpKa/Q==
 
 vm-browserify@^1.0.1:
   version "1.1.2"
