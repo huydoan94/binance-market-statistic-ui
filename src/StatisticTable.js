@@ -120,7 +120,7 @@ class StatisticTable extends React.PureComponent {
       key: 'percentage2hrChange',
       sorter: {
         compare: (a, b) => comparer(a.percentage2hrChange, b.percentage2hrChange),
-        multiple: 1
+        multiple: 2
       },
       width: 200,
       render: (_, { percentage2hrChange }) => ({
@@ -157,7 +157,7 @@ class StatisticTable extends React.PureComponent {
       key: 'percentage24hrChange',
       sorter: {
         compare: (a, b) => comparer(a.percentage24hrChange, b.percentage24hrChange),
-        multiple: 2
+        multiple: 1
       },
       width: 200,
       render: (_, { percentage24hrChange }) => ({
