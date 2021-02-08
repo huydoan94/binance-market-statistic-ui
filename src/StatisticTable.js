@@ -118,7 +118,10 @@ class StatisticTable extends React.PureComponent {
       title: '% 2hr Price Change',
       dataIndex: 'percentage2hrChange',
       key: 'percentage2hrChange',
-      sorter: (a, b) => comparer(a.percentage2hrChange, b.percentage2hrChange),
+      sorter: {
+        compare: (a, b) => comparer(a.percentage2hrChange, b.percentage2hrChange),
+        multiple: 1
+      },
       width: 200,
       render: (_, { percentage2hrChange }) => ({
         props: {
@@ -152,7 +155,10 @@ class StatisticTable extends React.PureComponent {
       title: '% 24hr Price Change',
       dataIndex: 'percentage24hrChange',
       key: 'percentage24hrChange',
-      sorter: (a, b) => comparer(a.percentage24hrChange, b.percentage24hrChange),
+      sorter: {
+        compare: (a, b) => comparer(a.percentage24hrChange, b.percentage24hrChange),
+        multiple: 2
+      },
       width: 200,
       render: (_, { percentage24hrChange }) => ({
         props: {
