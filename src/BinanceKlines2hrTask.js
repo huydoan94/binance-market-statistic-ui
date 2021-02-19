@@ -37,7 +37,7 @@ class BinanceKlines2hrTask {
     if (haveToFetch.length > 0) {
       const res = await Promise.all(haveToFetch);
       const dataMap = haveToFetchCoinMap.reduce((agg, cm, idx) => {
-        if (!res[idx]) return agg;
+        if (!res[idx] || !res[idx].data || !res[idx].data[1]) return agg;
 
         const klineData = res[idx].data[0];
         // Shift open time of newest to its previous for marking open time.
